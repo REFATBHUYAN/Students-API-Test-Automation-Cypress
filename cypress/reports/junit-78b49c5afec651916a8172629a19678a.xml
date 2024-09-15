@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="1.463" tests="5" failures="0">
+  <testsuite name="Root Suite" timestamp="2024-09-15T17:57:38" tests="0" file="cypress\e2e\api-tests\student.cy.js" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Student API Tests" timestamp="2024-09-15T17:57:38" tests="5" time="1.456" failures="0">
+    <testcase name="Student API Tests Get Student - Validate Status Code" time="0.730" classname="Get Student - Validate Status Code">
+    </testcase>
+    <testcase name="Student API Tests Get Student - Validate Response Length" time="0.326" classname="Get Student - Validate Response Length">
+    </testcase>
+    <testcase name="Student API Tests Create Student - Validate Status Code and Store ID" time="0.085" classname="Create Student - Validate Status Code and Store ID">
+    </testcase>
+    <testcase name="Student API Tests Get Specific Student - Validate Field Values" time="0.099" classname="Get Specific Student - Validate Field Values">
+    </testcase>
+    <testcase name="Student API Tests Create Technical Skills - Validate Status Code" time="0.086" classname="Create Technical Skills - Validate Status Code">
+    </testcase>
+  </testsuite>
+</testsuites>

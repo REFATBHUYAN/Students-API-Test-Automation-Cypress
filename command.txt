@@ -1,0 +1,204 @@
+npm init -y
+npm install cypress @shelex/cypress-allure-plugin allure-commandline --save-dev
+npx cypress open
+allure generate allure-results --clean -o allure-report
+allure open allure-report
+
+
+const { defineConfig } = require("cypress");
+
+module.exports = defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      require('@shelex/cypress-allure-plugin/writer')(on, config);
+      return config;
+    },
+    baseUrl: 'https://thetestingworldapi.com',
+    specPattern: 'cypress/e2e/**/*.cy.js'
+  },
+  env: {
+    allure: true,
+    allureResultsPath: 'allure-results'
+  }
+});
+
+import '@shelex/cypress-allure-plugin';
+
+
+To complete the API testing exam using Cypress, the Page Object Model (POM), and Allure reporting, we’ll use Cypress for API testing, follow best practices with ES6 modules, and integrate Allure for reporting.
+
+Here are the detailed steps:
+
+### 1. **Set up the Project**
+
+1. Initialize a new Node.js project:
+   ```bash
+   npm init -y
+   ```
+
+2. Install Cypress and Allure dependencies:
+   ```bash
+   npm install cypress @shelex/cypress-allure-plugin allure-commandline --save-dev
+   ```
+
+3. Configure Cypress to work with Allure:
+   In `cypress.config.js` (or `cypress.config.ts` if using TypeScript):
+   ```javascript
+   const { defineConfig } = require("cypress");
+
+   module.exports = defineConfig({
+     e2e: {
+       setupNodeEvents(on, config) {
+         require('@shelex/cypress-allure-plugin/writer')(on, config);
+         return config;
+       },
+       baseUrl: 'https://thetestingworldapi.com',
+       specPattern: 'cypress/e2e/**/*.cy.js'
+     },
+     env: {
+       allure: true,
+       allureResultsPath: 'allure-results'
+     }
+   });
+   ```
+
+4. In `cypress/support/e2e.js`, add:
+   ```javascript
+   import '@shelex/cypress-allure-plugin';
+   ```
+
+### 2. **Set Up Folder Structure for Page Object Model (POM)**
+   Create folders for organizing tests, page objects, and utilities:
+   - `cypress/e2e/api-tests`
+   - `cypress/page-objects`
+   - `cypress/fixtures`
+
+### 3. **Write Test Cases Based on the API Exam**
+
+Here’s an example for testing **Get Student API** using the Page Object Model:
+
+#### **Step 1: Create Page Object for the Student API**
+
+Create a file `cypress/page-objects/studentAPI.js`:
+```javascript
+export class StudentAPI {
+  getStudents() {
+    return cy.request({
+      method: 'GET',
+      url: '/api/studentsDetails',
+    });
+  }
+
+  createStudent(student) {
+    return cy.request({
+      method: 'POST',
+      url: '/api/studentsDetails',
+      body: student,
+    });
+  }
+
+  getSpecificStudent(id) {
+    return cy.request({
+      method: 'GET',
+      url: `/api/studentsDetails/${id}`,
+    });
+  }
+
+  createTechnicalSkills(skill) {
+    return cy.request({
+      method: 'POST',
+      url: '/api/technicalskills',
+      body: skill,
+    });
+  }
+}
+```
+
+#### **Step 2: Write Test Cases**
+
+Create a test file `cypress/e2e/api-tests/student.cy.js`:
+```javascript
+import { StudentAPI } from '../../page-objects/studentAPI';
+
+describe('Student API Tests', () => {
+  const studentAPI = new StudentAPI();
+
+  it('Get Student - Validate Status Code', () => {
+    studentAPI.getStudents().then((response) => {
+      expect(response.status).to.eq(200);
+      cy.allure().step('Checked Status Code 200');
+    });
+  });
+
+  it('Get Student - Validate Response Length', () => {
+    studentAPI.getStudents().then((response) => {
+      expect(response.body.length).to.be.greaterThan(0);
+      cy.allure().step('Validated the length of response');
+    });
+  });
+
+  it('Create Student - Validate Status Code', () => {
+    const student = {
+      first_name: "John",
+      middle_name: "Doe",
+      last_name: "Smith",
+      date_of_birth: "1995-12-23"
+    };
+
+    studentAPI.createStudent(student).then((response) => {
+      expect(response.status).to.eq(201);
+      cy.allure().step('Created a new student and checked status code 201');
+    });
+  });
+
+  it('Get Specific Student - Validate Field Values', () => {
+    const studentId = 526716;
+
+    studentAPI.getSpecificStudent(studentId).then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body.data).to.have.property('id', studentId);
+      expect(response.body.data).to.have.property('first_name', 'sample');
+      expect(response.body.data).to.have.property('middle_name', 'sample');
+      expect(response.body.data).to.have.property('last_name', 'sample');
+      expect(response.body.data).to.have.property('date_of_birth', 'sample');
+      cy.allure().step('Validated specific student field values');
+    });
+  });
+
+  it('Create Technical Skills - Validate Status Code', () => {
+    const skills = {
+      id: 1,
+      language: ["JavaScript", "Python"],
+      yearexp: "2",
+      lastused: "2023",
+      st_id: 526716
+    };
+
+    studentAPI.createTechnicalSkills(skills).then((response) => {
+      expect(response.status).to.eq(200);
+      cy.allure().step('Created technical skills and checked status code 200');
+    });
+  });
+});
+```
+
+### 4. **Run the Tests and Generate Allure Reports**
+
+1. Run Cypress tests:
+   ```bash
+   npx cypress open
+   ```
+
+2. After running tests, generate the Allure report:
+   ```bash
+   allure generate allure-results --clean -o allure-report
+   allure open allure-report
+   ```
+
+### 5. **Best Practices with ES6 Modules**
+
+- **Reusable Code**: All API calls are abstracted into the `StudentAPI` class.
+- **Assertions and Steps**: Each test case checks the status code and response data, and we use `cy.allure().step()` to log test steps in the report.
+- **Modular Structure**: We used a page object model structure to keep the tests clean and maintainable.
+
+By following these steps, you’ve built an API test suite for the provided API exam using Cypress, integrated the Page Object Model, and generated Allure reports.

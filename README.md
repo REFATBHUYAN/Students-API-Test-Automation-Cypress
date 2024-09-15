@@ -93,7 +93,8 @@ Here’s a summary of the latest test run:
 
 You can find the full report here: [Mochawesome Report](./cypress/reports/mochawesome-report.html)
 
-![Mochawesome Report Screenshot](path-to-your-screenshot.png)
+![Mochawesome Report Screenshot](https://github.com/REFATBHUYAN/Students-API-Test-Automation-Cypress/blob/main/screenshots/image%20(2).png)
+![Mochawesome Report Screenshot](https://github.com/REFATBHUYAN/Students-API-Test-Automation-Cypress/blob/main/screenshots/image%20(3).png)
 
 ## Project Structure
 
